@@ -1,9 +1,5 @@
 <template>
     <div id="nav"></div>
-    <es-input :type="'password'"></es-input>
-    {{ showA }}
-    <A v-model:showA="showA" v-model:show="show"></A>
-    <Func></Func>
     <transition mode="in-out" name="mode-fade">
         <p v-if="show">demo</p>
         <p v-else>hide</p>
@@ -12,8 +8,6 @@
 </template>
 <script>
 import { ref } from '@vue/reactivity';
-import A from './views/A';
-import Func from './views/Func';
 export default {
     setup() {
         let show = ref(true);
@@ -26,12 +20,9 @@ export default {
             show,
             changeShow,
             showA,
-            Func,
         };
     },
-    components: {
-        A,
-    },
+    components: {},
 };
 </script>
 <style lang="scss">

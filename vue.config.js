@@ -1,13 +1,15 @@
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
+const TerserPlugin = require('terser-webpack-plugin');
 const os = require('os');
 const path = require('path');
 
-const smp = new SpeedMeasurePlugin();
 const IS_PROD = process.env.NODE_ENV === 'production';
+const smp = new SpeedMeasurePlugin({
+    disable: !IS_PROD,
+});
 
 module.exports = {
     devServer: {
@@ -44,10 +46,18 @@ module.exports = {
             ],
         },
         plugins: [
-            new ProgressBarPlugin(),
             IS_PROD && new WebpackMd5Hash(),
             IS_PROD && new HardSourceWebpackPlugin(),
             IS_PROD && new BundleAnalyzerPlugin(),
+            IS_PROD &&
+                new TerserPlugin({
+                    sourceMap: false,
+                    terserOptions: {
+                        compress: {
+                            drop_console: true,
+                        },
+                    },
+                }),
         ].filter(Boolean),
     }),
 };
