@@ -46,6 +46,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
+      // "commit-msg":"commitlint -e $GIT_PARAMS"
     }
   },
   "lint-staged": {
@@ -56,7 +57,7 @@
     ],
     "*.{less,scss}": [
       "stylelint --config  ./.stylelintrc --fix",
-      "git add"
+      "git add ."
     ]
   }
 }
