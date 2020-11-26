@@ -5,11 +5,6 @@
     <A v-model:showA="showA" v-model:show="show"></A>
     <Func></Func>
     <transition mode="in-out" name="mode-fade">
-        <!-- <router-view /> -->
-        <!-- <es-button :type="'success'">
-      {{ people.name }}
-      <template #default="people">{{ people.name }} </template>
-    </es-button> -->
         <p v-if="show">demo</p>
         <p v-else>hide</p>
     </transition>
