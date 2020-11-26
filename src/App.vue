@@ -1,30 +1,73 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+    <div id="nav"></div>
+    <es-input :type="'password'"></es-input>
+    {{ showA }}
+    <A v-model:showA="showA" v-model:show="show"></A>
+    <Func></Func>
+    <transition mode="in-out" name="mode-fade">
+        <!-- <router-view /> -->
+        <!-- <es-button :type="'success'">
+      {{ people.name }}
+      <template #default="people">{{ people.name }} </template>
+    </es-button> -->
+        <p v-if="show">demo</p>
+        <p v-else>hide</p>
+    </transition>
+    <button @click="changeShow">显示demo</button>
 </template>
-
+<script>
+import { ref } from '@vue/reactivity';
+import A from './views/A';
+import Func from './views/Func';
+export default {
+    setup() {
+        let show = ref(true);
+        let showA = ref('a');
+        function changeShow() {
+            show.value = !show.value;
+            console.log(show.value);
+        }
+        return {
+            show,
+            changeShow,
+            showA,
+            Func,
+        };
+    },
+    components: {
+        A,
+    },
+};
+</script>
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
 }
 
 #nav {
-  padding: 30px;
+    padding: 30px;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+    a {
+        font-weight: bold;
+        color: #2c3e50;
 
-    &.router-link-exact-active {
-      color: #42b983;
+        &.router-link-exact-active {
+            color: #42b983;
+        }
     }
-  }
+}
+
+.mode-fade-enter-active,
+.mode-fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.mode-fade-enter-from,
+.mode-fade-leave-to {
+    opacity: 0;
 }
 </style>
