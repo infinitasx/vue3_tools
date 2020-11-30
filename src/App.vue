@@ -4,6 +4,7 @@
         <p v-if="show">demo</p>
         <p v-else>hide</p>
     </transition>
+
     <button @click="changeShow">显示demo</button>
 </template>
 <script>
