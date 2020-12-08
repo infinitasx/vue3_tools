@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// eslint-disable-next-line no-alert
 // 模拟报错弹框
 const showMessage = error => console.log(error.content.toString());
 
