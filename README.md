@@ -1,4 +1,6 @@
-### 全局安装 commitizen
+### 代码提交规范
+
+## 全局安装 commitizen
 
 ```
 npm install -g commitizen
