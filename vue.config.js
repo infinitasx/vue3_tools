@@ -1,7 +1,6 @@
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const WebpackMd5Hash = require('webpack-md5-hash');
 const TerserPlugin = require('terser-webpack-plugin');
 const os = require('os');
 const path = require('path');
@@ -46,7 +45,6 @@ module.exports = {
             ],
         },
         plugins: [
-            IS_PROD && new WebpackMd5Hash(),
             IS_PROD && new HardSourceWebpackPlugin(),
             IS_PROD && new BundleAnalyzerPlugin(),
             IS_PROD &&
