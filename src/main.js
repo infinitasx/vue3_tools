@@ -13,4 +13,20 @@ app.use(router);
 // app.directive()
 // app.component()
 
+// Sentry init
+if (process.env.NODE_ENV !== 'development') {
+    /* eslint-disable no-undef */
+    Sentry.init({
+        dsn: '',
+        integrations: [
+            new Sentry.Integrations.Vue({ Vue: app, attachProps: true }),
+            new Sentry.Integrations.BrowserTracing(),
+        ],
+        // We recommend adjusting this value in production, or using tracesSampler
+        // for finer control
+        tracesSampleRate: 1.0,
+    });
+    /* eslint-enable */
+}
+
 app.mount('#app');
