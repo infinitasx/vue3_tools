@@ -6,11 +6,21 @@ const os = require('os');
 const path = require('path');
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+const semver = require('semver');
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 const smp = new SpeedMeasurePlugin({
   disable: !IS_PROD,
 });
+
+const getVersion = (dependencies => packageName => {
+  if (dependencies[packageName]) {
+    // https://docs.npmjs.com/cli/v6/using-npm/semver#ranges
+    return semver.minVersion(dependencies[packageName]);
+  } else {
+    throw new Error(`not found package: ${packageName}`);
+  }
+})(require('./package.json').dependencies);
 
 module.exports = {
   devServer: {
@@ -70,22 +80,10 @@ module.exports = {
           {
             append: false,
             tags: [
-              {
-                path: 'https://browser.sentry-cdn.com/5.29.0/bundle.tracing.min.js',
-                attributes: {
-                  integrity:
-                    'sha384-XAhY32zqfuE8aJxn2jjoj70IiDlyteUPCkF97irXm5oFRdTYUHt+y6n2VLZwBPok',
-                  crossorigin: 'anonymous',
-                },
-              },
-              {
-                path: 'https://browser.sentry-cdn.com/5.29.0/vue.min.js',
-                attributes: {
-                  integrity:
-                    'sha384-FKagncFah3a9nkKNEIDQqXhYnny5Wzc37/AZV5eKKnRVS8uPpeFPdu9dnrvAnRpF',
-                  crossorigin: 'anonymous',
-                },
-              },
+              `https://browser.sentry-cdn.com/${getVersion(
+                '@sentry/tracing',
+              )}/bundle.tracing.min.js`,
+              `https://browser.sentry-cdn.com/${getVersion('@sentry/vue')}/vue.min.js`,
             ],
             publicPath: false,
           },

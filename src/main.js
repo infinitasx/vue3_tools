@@ -1,4 +1,8 @@
 import { createApp } from 'vue';
+
+import * as Sentry from '@sentry/vue'; // Sentry for Vue
+import { Integrations } from '@sentry/tracing'; // Sentry Monitor Performance
+
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -15,18 +19,14 @@ app.use(router);
 
 // Sentry init
 if (process.env.NODE_ENV !== 'development') {
-  /* eslint-disable no-undef */
   Sentry.init({
+    Vue: app,
     dsn: '',
-    integrations: [
-      new Sentry.Integrations.Vue({ Vue: app, attachProps: true }),
-      new Sentry.Integrations.BrowserTracing(),
-    ],
+    integrations: [new Integrations.BrowserTracing()],
     // We recommend adjusting this value in production, or using tracesSampler
     // for finer control
     tracesSampleRate: 1.0,
   });
-  /* eslint-enable */
 }
 
 app.mount('#app');
