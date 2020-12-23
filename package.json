@@ -62,7 +62,7 @@
       "npm run lint",
       "prettier --write"
     ],
-    "*.{less,scss,vue}": [
+    "*.{less,scss}": [
       "stylelint --config  ./.stylelintrc --fix"
     ]
   }
