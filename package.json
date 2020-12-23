@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --fix",
     "commit": "git cz"
   },
   "dependencies": {
@@ -54,12 +54,10 @@
   "lint-staged": {
     "*.{js,vue}": [
       "npm run lint",
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.{less,scss,vue}": [
-      "stylelint --config  ./.stylelintrc --fix",
-      "git add"
+      "stylelint --config  ./.stylelintrc --fix"
     ]
   }
 }
