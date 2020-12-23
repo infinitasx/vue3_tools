@@ -1,10 +1,10 @@
 <template>
-    <div id="nav"></div>
-    <transition mode="in-out" name="mode-fade">
-        <p v-if="show">demo</p>
-        <p v-else>hide</p>
-    </transition>
-    <button @click="changeShow">显示demo</button>
+  <div id="nav"></div>
+  <transition mode="in-out" name="mode-fade">
+    <p v-if="show">demo</p>
+    <p v-else>hide</p>
+  </transition>
+  <button @click="changeShow">显示demo</button>
 </template>
 <script>
 import { ref } from '@vue/reactivity';
@@ -12,6 +12,8 @@ export default {
   setup() {
     let show = ref(true);
     let showA = ref('a');
+    let a;
+    console.log(a);
     function changeShow() {
       show.value = !show.value;
       console.log(show.value);
