@@ -58,7 +58,7 @@
     }
   },
   "lint-staged": {
-    "*.{less,scss,vue}": [
+    "*.{less,scss}": [
       "stylelint --config  ./.stylelintrc --fix"
     ],
     "*.{js,vue}": [
