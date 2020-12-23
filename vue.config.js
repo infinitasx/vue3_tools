@@ -73,6 +73,11 @@ module.exports = {
   chainWebpack(config) {
     /* eslint-disable no-shadow */
     config.when(IS_PROD, config => {
+      config.externals({
+        '@sentry/vue': 'Sentry',
+        '@sentry/tracing': 'Sentry',
+      });
+
       // add Sentry cdn links
       config
         .plugin('production-tags')
