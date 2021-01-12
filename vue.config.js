@@ -24,25 +24,23 @@ const getVersion = (dependencies => packageName => {
 
 // 打包时自动压缩图片
 const imgLoader = () => {
-  if (IS_PROD) {
-    return {
-      test: /\.(gif|png|jpe?g|svg)$/i,
-      use: [
-        {
-          loader: 'image-webpack-loader',
-          options: {
-            progressive: true,
-            optimizationLevel: 7,
-            interlaced: false,
-            mozjpoeg: { quality: 70 },
-            pngquant: { quality: '65-90', speed: 4 },
-            gifsicle: { interlaced: false },
-            webp: { quality: 75 },
-          },
+  return {
+    test: /\.(gif|png|jpe?g|svg)$/i,
+    use: [
+      {
+        loader: 'image-webpack-loader',
+        options: {
+          progressive: true,
+          optimizationLevel: 7,
+          interlaced: false,
+          mozjpoeg: { quality: 70 },
+          pngquant: { quality: '65-90', speed: 4 },
+          gifsicle: { interlaced: false },
+          webp: { quality: 75 },
         },
-      ],
-    };
-  }
+      },
+    ],
+  };
 };
 
 module.exports = {
@@ -53,13 +51,21 @@ module.exports = {
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
-    proxy: 'http://127.0.0.1:5000',
+    proxy: {
+      [process.env.VUE_APP_BASE_API]: {
+        target: process.env.VUE_APP_BASE_HOST,
+        changeOrigin: true,
+        pathRewrite: {
+          [`^${process.env.VUE_APP_BASE_API}`]: '',
+        },
+      },
+    },
   },
   // productionSourceMap: false,
   configureWebpack: smp.wrap({
     module: {
       rules: [
-        imgLoader(),
+        IS_PROD && imgLoader(),
         {
           test: /\.js$/,
           include: path.resolve('src'),
@@ -78,7 +84,7 @@ module.exports = {
             },
           ],
         },
-      ],
+      ].filter(Boolean),
     },
     plugins: [
       IS_PROD && new HardSourceWebpackPlugin(),

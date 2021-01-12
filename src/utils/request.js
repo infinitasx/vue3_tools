@@ -2,7 +2,9 @@
 
 import axios from 'axios';
 
-let BASE_URL = process.env.NODE_ENV == 'production' ? '' : '/api/v1';
+let BASE_URL = process.env.VUE_APP_BASE_API;
+
+console.log('BASE_URL', BASE_URL);
 
 const instance = axios.create({
   baseURL: BASE_URL,
@@ -27,7 +29,6 @@ instance.interceptors.request.use(function (config) {
 // 过滤逻辑错误
 instance.interceptors.response.use(
   rawResponse => {
-    console.log(rawResponse);
     return rawResponse.data;
   },
   rawError => {
