@@ -19,10 +19,10 @@ app.use(router);
 // app.component()
 
 // Sentry init
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV !== 'development' && process.env.VUE_APP_SENTRY_DSN) {
   Sentry.init({
     Vue: app,
-    dsn: '',
+    dsn: process.env.VUE_APP_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
     // We recommend adjusting this value in production, or using tracesSampler
     // for finer control
