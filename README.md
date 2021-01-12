@@ -1,4 +1,4 @@
-### mock
+### Mock
 
 ```
 yarn mock // 前端项目
