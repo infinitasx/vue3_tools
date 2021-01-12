@@ -96,23 +96,25 @@ module.exports = {
         .end();
 
       // Sentry Source Map Upload Report
-      config
-        .plugin('sentry')
-        .use(SentryWebpackPlugin, [
-          {
-            // sentry-cli configuration
-            authToken: process.env.SENTRY_AUTH_TOKEN,
-            org: process.env.SENTRY_ORG,
-            project: process.env.SENTRY_PROJECT,
+      config.when(process.env.VUE_APP_SENTRY_AUTH_TOKEN, config => {
+        config
+          .plugin('sentry')
+          .use(SentryWebpackPlugin, [
+            {
+              // sentry-cli configuration
+              authToken: process.env.VUE_APP_SENTRY_AUTH_TOKEN,
+              org: process.env.VUE_APP_SENTRY_ORG,
+              project: process.env.VUE_APP_SENTRY_PROJECT,
 
-            // webpack specific configuration
-            include: './dist',
-            ignore: ['css', 'fonts', 'img'],
-            release: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
-            urlPrefix: '/', // publicPath
-          },
-        ])
-        .end();
+              // webpack specific configuration
+              include: './dist',
+              ignore: ['css', 'fonts', 'img'],
+              release: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+              urlPrefix: '/', // publicPath
+            },
+          ])
+          .end();
+      });
 
       // source-map files need to delete
       // todo del /dist/**/*.map
