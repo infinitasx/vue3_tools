@@ -9,9 +9,9 @@ yarn server // 后端项目
 
 ### 代码提交规范
 
+```
 <type>(<scope>): <subject>
 
-```
 feat: 增加新功能
 fix: 修复bug
 docs: 只改动了文档相关的内容
