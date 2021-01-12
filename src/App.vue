@@ -1,28 +1,32 @@
 <template>
-  <div id="nav"></div>
-  <transition mode="in-out" name="mode-fade">
-    <p v-if="show">demo</p>
-    <p v-else>hide</p>
-  </transition>
-  <button @click="changeShow">显示demo</button>
+  <ul class="ui-repeart">
+    <li class="repeart-item" v-for="(item, index) in lists" :key="index">{{ item.name }}</li>
+  </ul>
+  <img :src="img" />
 </template>
 <script>
 import { ref } from '@vue/reactivity';
+import { onBeforeMount } from 'vue';
+import { getMock, postMock } from './api';
 export default {
   setup() {
-    let show = ref(true);
-    let showA = ref('a');
-    let a;
-    console.log(a);
-    function changeShow() {
-      show.value = !show.value;
-      console.log(show.value);
-    }
-    return {
-      show,
-      changeShow,
-      showA,
-    };
+    let img = ref(null);
+    let lists = ref([]);
+    onBeforeMount(() => {
+      getMock().then(res => {
+        if (res.code === 200) {
+          const { data } = res;
+          lists.value = data;
+        }
+      });
+      postMock().then(res => {
+        if (res.code === 200) {
+          const { image } = res.data;
+          img.value = image;
+        }
+      });
+    });
+    return { img, lists };
   },
   components: {},
 };
@@ -57,5 +61,8 @@ export default {
 .mode-fade-enter-from,
 .mode-fade-leave-to {
   opacity: 0;
+}
+li {
+  list-style: none;
 }
 </style>

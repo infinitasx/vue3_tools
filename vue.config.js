@@ -1,9 +1,10 @@
+const os = require('os');
+const path = require('path');
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require('terser-webpack-plugin');
-const os = require('os');
-const path = require('path');
+
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const semver = require('semver');
@@ -15,12 +16,32 @@ const smp = new SpeedMeasurePlugin({
 
 const getVersion = (dependencies => packageName => {
   if (dependencies[packageName]) {
-    // https://docs.npmjs.com/cli/v6/using-npm/semver#ranges
     return semver.minVersion(dependencies[packageName]);
   } else {
     throw new Error(`not found package: ${packageName}`);
   }
 })(require('./package.json').dependencies);
+
+// 打包时自动压缩图片
+const imgLoader = () => {
+  return {
+    test: /\.(gif|png|jpe?g|svg)$/i,
+    use: [
+      {
+        loader: 'image-webpack-loader',
+        options: {
+          progressive: true,
+          optimizationLevel: 7,
+          interlaced: false,
+          mozjpoeg: { quality: 70 },
+          pngquant: { quality: '65-90', speed: 4 },
+          gifsicle: { interlaced: false },
+          webp: { quality: 75 },
+        },
+      },
+    ],
+  };
+};
 
 module.exports = {
   devServer: {
@@ -30,12 +51,21 @@ module.exports = {
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
-    proxy: 'http://127.0.0.1:5000',
+    proxy: {
+      [process.env.VUE_APP_BASE_API]: {
+        target: process.env.VUE_APP_BASE_HOST,
+        changeOrigin: true,
+        pathRewrite: {
+          [`^${process.env.VUE_APP_BASE_API}`]: '',
+        },
+      },
+    },
   },
   // productionSourceMap: false,
   configureWebpack: smp.wrap({
     module: {
       rules: [
+        IS_PROD && imgLoader(),
         {
           test: /\.js$/,
           include: path.resolve('src'),
@@ -54,7 +84,7 @@ module.exports = {
             },
           ],
         },
-      ],
+      ].filter(Boolean),
     },
     plugins: [
       IS_PROD && new HardSourceWebpackPlugin(),
@@ -71,14 +101,11 @@ module.exports = {
     ].filter(Boolean),
   }),
   chainWebpack(config) {
-    /* eslint-disable no-shadow */
-    config.when(IS_PROD, config => {
+    config.when(IS_PROD, () => {
       config.externals({
         '@sentry/vue': 'Sentry',
         '@sentry/tracing': 'Sentry',
       });
-
-      // add Sentry cdn links
       config
         .plugin('production-tags')
         .use(HtmlWebpackTagsPlugin, [
@@ -94,33 +121,21 @@ module.exports = {
           },
         ])
         .end();
-
-      // Sentry Source Map Upload Report
-      config.when(process.env.VUE_APP_SENTRY_AUTH_TOKEN, config => {
-        config
-          .plugin('sentry')
-          .use(SentryWebpackPlugin, [
-            {
-              // sentry-cli configuration
-              authToken: process.env.VUE_APP_SENTRY_AUTH_TOKEN,
-              org: process.env.VUE_APP_SENTRY_ORG,
-              project: process.env.VUE_APP_SENTRY_PROJECT,
-
-              // webpack specific configuration
-              include: './dist',
-              ignore: ['css', 'fonts', 'img'],
-              release: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
-              urlPrefix: '/', // publicPath
-            },
-          ])
-          .end();
-      });
-
-      // source-map files need to delete
-      // todo del /dist/**/*.map
-      // https://webpack.js.org/configuration/devtool/#devtool
+      config
+        .plugin('sentry')
+        .use(SentryWebpackPlugin, [
+          {
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+            org: process.env.SENTRY_ORG,
+            project: process.env.SENTRY_PROJECT,
+            include: './dist',
+            ignore: ['css', 'fonts', 'img'],
+            release: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+            urlPrefix: '/', // publicPath
+          },
+        ])
+        .end();
       config.devtool('hidden-source-map');
     });
-    /* eslint-enable */
   },
 };
