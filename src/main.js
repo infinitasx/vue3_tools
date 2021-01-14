@@ -6,6 +6,7 @@ import { Integrations } from '@sentry/tracing'; // Sentry Monitor Performance
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import 'tailwindcss/tailwind.css';
 
 const app = createApp(App);
 

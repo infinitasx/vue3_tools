@@ -1,3 +1,7 @@
+### tailwind
+
+具体写法参照https://www.tailwindcss.cn/docs/plugins
+
 ### Mock
 
 ```

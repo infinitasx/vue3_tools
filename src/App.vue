@@ -3,6 +3,10 @@
     <li class="repeart-item" v-for="(item, index) in lists" :key="index">{{ item.name }}</li>
   </ul>
   <img :src="img" />
+  <p class="bg-gray-100 border-green-500 p-11">123</p>
+  <div class="test">
+    <p>test</p>
+  </div>
 </template>
 <script>
 import { ref } from '@vue/reactivity';
@@ -31,38 +35,10 @@ export default {
   components: {},
 };
 </script>
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<style lang="scss" scoped>
+.test {
+  p {
+    color: red;
   }
-}
-
-.mode-fade-enter-active,
-.mode-fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.mode-fade-enter-from,
-.mode-fade-leave-to {
-  opacity: 0;
-}
-li {
-  list-style: none;
 }
 </style>
