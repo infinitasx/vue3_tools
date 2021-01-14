@@ -4,6 +4,8 @@ const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require('terser-webpack-plugin');
+const cssnano = require('cssnano');
+const purgecss = require('@fullhuman/postcss-purgecss');
 
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
@@ -58,6 +60,23 @@ module.exports = {
         pathRewrite: {
           [`^${process.env.VUE_APP_BASE_API}`]: '',
         },
+      },
+    },
+  },
+  css: {
+    loaderOptions: {
+      postcss: {
+        plugins: [
+          require('tailwindcss'),
+          require('autoprefixer'),
+          cssnano({
+            preset: 'default',
+          }),
+          purgecss({
+            content: ['./src/**/*.vue', './src/**/*.jsx'],
+            defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+          }),
+        ],
       },
     },
   },
