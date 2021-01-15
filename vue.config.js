@@ -69,14 +69,16 @@ module.exports = {
         plugins: [
           require('tailwindcss'),
           require('autoprefixer'),
-          cssnano({
-            preset: 'default',
-          }),
-          purgecss({
-            content: ['./src/**/*.vue', './src/**/*.jsx'],
-            defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
-          }),
-        ],
+          IS_PROD &&
+            cssnano({
+              preset: 'default',
+            }),
+          IS_PROD &&
+            purgecss({
+              content: ['./src/**/*.vue', './src/**/*.jsx'],
+              defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+            }),
+        ].filter(Boolean),
       },
     },
   },

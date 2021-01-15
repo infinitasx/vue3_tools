@@ -1,9 +1,11 @@
 <template>
   <ul class="ui-repeart">
-    <li class="repeart-item" v-for="(item, index) in lists" :key="index">{{ item.name }}</li>
+    <li class="repeart-item text-gray-600" v-for="(item, index) in lists" :key="index">
+      {{ item.name }}
+    </li>
   </ul>
-  <img :src="img" />
-  <p class="bg-gray-100 border-green-500 p-11">123</p>
+  <img :src="img" class="rounded-b-lg rounded-t-md" />
+  <p class="bg-gray-100 border-green-500 p-test m-test text-test-black">123</p>
   <div class="test">
     <p>test</p>
   </div>

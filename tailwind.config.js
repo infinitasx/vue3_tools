@@ -3,13 +3,21 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      borderRadius: {
-        xl: '2px',
+      colors: {
+        'test-color': '#ff0000',
+        'test-black': 'black',
+      },
+      padding: {
+        test: '50px',
+      },
+      margin: {
+        test: '50px',
       },
     },
   },
   variants: {
     extend: {},
   },
+  prefix: '',
   plugins: [],
 };
