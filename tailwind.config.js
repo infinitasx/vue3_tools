@@ -6,12 +6,13 @@ module.exports = {
       colors: {
         'test-color': '#ff0000',
         'test-black': 'black',
+        'test-reds': 'red',
       },
       padding: {
-        test: '50px',
+        test: '10px',
       },
       margin: {
-        test: '50px',
+        test: '10px',
       },
     },
   },
